@@ -1,0 +1,19 @@
+{
+  "name": "site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "tailwindcss  -i ./src/input.css -o ./dist/output.css --watch  & live-server ",
+    "start": "live-server ./ "
+  },
+  "keywords": [],
+  "author": "Kacper Trzeciak",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
+  }
+}
