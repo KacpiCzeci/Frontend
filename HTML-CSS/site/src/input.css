@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+    html {
+      font-family: 'Quire Sans', sans-serif;
+    }
+
+    body {
+      min-width: 440px;
+      min-height: 100vh;
+    }
+}
+
+.smalllMenu {
+  @apply block md:hidden lg:block xl:hidden
+}
+
+.largeMenu{
+  @apply hidden md:block lg:hidden xl:block
+}
+
+.parentGrid > * {
+  @apply min-h-[300px] sm:min-h-[260px] md:min-h-[320px] lg:min-h-[300px] xl:min-h-[360px] 2xl:min-h-[300px];
+}
+
+.background {
+  @apply bg-cover;
+  @apply bg-fixed;
+}
+
+.verysmallText {
+  @apply text-xs sm:text-[10px] md:text-xs lg:text-[10px] xl:text-xs
+}
+
+.smallText {
+  @apply text-sm sm:text-xs md:text-sm lg:text-xs xl:text-sm
+}
+
+.mediumText {
+  @apply text-2xl sm:text-base md:text-2xl lg:text-base xl:text-2xl
+}
+
+.largeText {
+  @apply text-3xl sm:text-lg md:text-3xl lg:text-lg xl:text-3xl
+}
+
+.verylargeText {
+  @apply text-4xl sm:text-2xl md:text-4xl lg:text-2xl xl:text-4xl
+}
+
+/* .mainTile {
+  @apply aspect-square
+}
+
+.sideTile {
+ @apply h-full
+}
+
+.mainTileDouble {
+  @apply aspect-2/1
+} */
+
