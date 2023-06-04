@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const TodoSchema = new Schema({
+    time: Date,
     text: String,
     done: Boolean
   }

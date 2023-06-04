@@ -28,6 +28,7 @@ router.get("/:todo_id", async (req, res) => {
 router.post("/", async (req, res) => {
   console.log(req);
     Todo.create({
+        time: Date.now(),
         text: req.body.text,
         done: false
       }).then(() => {
