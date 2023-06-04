@@ -14,7 +14,6 @@
     });
 
     let setActiveTab = (tab) => {
-        console.log(tab);
         activeTab.set(tab);
     };
 

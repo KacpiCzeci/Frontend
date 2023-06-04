@@ -1,60 +1,64 @@
 <script>
     import axios from 'axios';
-    import { form, field } from 'svelte-forms';
-    import { required } from 'svelte-forms/validators';
-    import { onMount } from 'svelte';
-    import { showAddTodo, updateTodos } from '../store/store.js';
+    import { updateTodos } from '../store/store.js';
 
-    const todoName = field('todoName', "", [required()]);
-    const todoStatus = field('todoStatus', false, []);
-    const todoForm = form(todoName, todoStatus);
+    let valid = true;
 
-    onMount(() => {
-        todoForm.validate();
-    });
-
-    let init = (el) => {
-        el.focus()
+    let validateForm = (data) => {
+        if(data.name != null && data.name !== '') {
+            valid = true;
+        }
+        else {
+            valid = false;
+        }
     }
 
-    let addTodo = async () => {
-        if($todoName.valid) {
+    let addTodo = async (e) => {
+        const formData = new FormData(e.target);
+
+        const data = {};
+        for (let field of formData) {
+            const [key, value] = field;
+            data[key] = value;
+        }
+
+        validateForm(data);
+
+        if(valid) {
             await axios.post(`/api/todos`, {
-                text: $todoName.value,
-                done: $todoStatus.value,
+                text: formData.get("name"),
+                done: false,
             }).then((response) => {
                 updateTodos();
-                todoForm.reset();
             });
+            e.target.reset();
         }
-    };
-
-    let closeAddTodo = () => {
-        showAddTodo.set(false);
     };
     
 </script>
 
-<div class="fixed bottom-0 p-4 z-50 flex flex-row w-full justify-between bg-white border-t border-teal-500">
-    <div class="flex flex-row bg-white">
-        <button on:click={() => closeAddTodo()} class="px-4 hover:brightness-125 hover:scale-110">
-            <img src="./close.svg" width="24px" height="24px" alt="close.svg"/>
-        </button>
-        <input type="text" id="add-navbar" bind:value={$todoName.value} use:init class="w-72 px-2 mx-3 text-sm text-gray-900 border border-teal-500 rounded-lg bg-white focus:outline-none focus:ring focus:ring-teal-400" placeholder="Add Todo...">
-        <div class="flex flex-nowrap items-center">
-            <input type="checkbox" name="check" id="check" bind:checked={$todoStatus.value}/>
-            <label for="check" class="px-2">
-                <div class="block">
-                    {$todoStatus.value ? "Done" : "Todo"}
-                </div>
-            </label>
-        </div>
-    </div>
-    <button on:click={() => addTodo()} class="bg-teal-500 rounded-full flex justify-center items-center flex-shrink-0 hover:bg-teal-300 hover:scale-110">
-        <img src="./add.svg" width="36px" height="36px" alt="add.svg"/>
+<form on:submit|preventDefault={addTodo} class="relative">
+    <input type="text" id="name" name="name" value="" class="{valid ? 'valid' : 'invalid' } block w-full p-2 pl-10 text-sm text-gray-900 rounded-lg bg-white focus:outline-none focus:ring focus:ring-teal-400" placeholder="Add Todo...">
+    <button type="submit" class="absolute inset-y-0 left-0 flex items-center pl-3 hover:brightness-200 hover:scale-110">
+        <img src="./add.svg" class="w-5 h-5 text-gray-500" alt="add.svg" />
     </button>
-</div>
+</form>
 
 <style>
+    .valid {
+        @apply border border-white ;
+    }
 
+    .invalid {
+        @apply border-2 border-[#db4f4f];
+        animation: shake 100ms ease-in-out;
+    }
+
+    @keyframes shake{
+        0% { transform: translateX(0) }
+        25% { transform: translateX(5px) }
+        50% { transform: translateX(-5px) }
+        75% { transform: translateX(5px) }
+        100% { transform: translateX(0) }
+    }
 </style>
