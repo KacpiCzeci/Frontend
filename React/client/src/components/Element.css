@@ -1,0 +1,3 @@
+.done {
+    @apply decoration-4 line-through decoration-red-800;
+}

@@ -1,0 +1,7 @@
+.active {
+    @apply border-teal-500;
+}
+
+.inactive {
+    @apply border-transparent;
+}
