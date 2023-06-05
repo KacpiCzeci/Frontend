@@ -1,0 +1,26 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm run dev --prefix client",
+    "server": "nodemon server.js --ignore 'client/'",
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
+  },
+  "keywords": [],
+  "author": "Kacper Trzeciak",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+    "svelte": "^3.59.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
