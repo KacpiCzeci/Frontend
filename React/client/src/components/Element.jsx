@@ -8,6 +8,7 @@ import updateTodos from "../store/updateTodos.js";
 
 export default function Element({ todo }) {
     const [input, setInput] = useState(todo.text);
+    const [valid, setValid] = useState(true);
     const editedTodo = useSelector((state) => state.editedTodo);
 
     const handleChange = (event) => {
@@ -31,12 +32,17 @@ export default function Element({ todo }) {
     };
 
     const editElement = async () => {
-        let newTodo = todo;
-        newTodo.text = input;
-        await axios.put(`/api/todos/${todo._id}`, newTodo).then(() =>{
-            closeEdit();
-            updateTodos();
-        });
+        if(input != null && input !== ''){
+            setValid(true);
+            let newTodo = todo;
+            newTodo.text = input;
+            await axios.put(`/api/todos/${todo._id}`, newTodo).then(() =>{
+                closeEdit();
+                updateTodos();
+            });
+        } else {
+            setValid(false);
+        }
     };
 
     const deleteElement = async (id) => {
@@ -54,7 +60,7 @@ export default function Element({ todo }) {
             {
                 editedTodo===todo._id?
                     <div className="flex flex-row items-center">
-                        <input value={input} onChange={handleChange}  autoFocus/>
+                        <input value={input} onChange={handleChange}  autoFocus className={`${valid ? 'valid' : 'invalid' } block w-full text-sm text-gray-900 rounded-lg bg-white`}/>
                         <button onClick={() => editElement()} className="pl-4 pr-2 hover:brightness-125 hover:scale-110">
                             <img src="./approve.svg" width="20px" height="20px" alt="approve.svg"/>
                         </button>
@@ -63,7 +69,7 @@ export default function Element({ todo }) {
                         </button>
                     </div>
                 :
-                    <p className="{todo.done ? 'done' : ''} whitespace-nowrap text-ellipsis overflow-hidden">{todo.text}</p>
+                    <p className={`${todo.done ? 'done' : ''} whitespace-nowrap text-ellipsis overflow-hidden`}>{todo.text}</p>
             }
             <ul className="flex flex-row flex-shrink-0">
                 <li className="mx-2">

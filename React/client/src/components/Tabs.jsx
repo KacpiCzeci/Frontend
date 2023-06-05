@@ -22,7 +22,6 @@ export default function Tabs() {
                 <ul className="flex flex-row flex-nowrap -mb-px text-sm font-medium text-center text-teal-500">
                     {
                         tabConfig.map((currentTab, index) => {
-                            console.log(activeTab === currentTab.id, currentTab.label);
                             return(
                                 <li key={currentTab.id} className="w-full mr-2">
                                     <button onClick={() => setActiveTab(currentTab.id)} className={`${activeTab === currentTab.id ? 'active' : 'inactive'} flex w-full justify-center p-4 border-b-4 rounded-t-lg hover:text-teal-300`}>

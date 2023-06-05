@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     selector: 'app-add-todo',
     template: `
          <form [formGroup]="form" (ngSubmit)="addTodo()" class="relative">
-            <input type="text" formControlName="textInput" [ngClass]="isValid()" class="block w-full p-2 pl-10 text-sm text-gray-900 rounded-lg bg-white focus:outline-none focus:ring focus:ring-teal-400" placeholder="Add Todo..." />
+            <input type="text" formControlName="textInput" [ngClass]="isValid()" (blur)="onBlur()" class="block w-full p-2 pl-10 text-sm text-gray-900 rounded-lg bg-white focus:outline-none focus:ring focus:ring-teal-400" placeholder="Add Todo..." />
             <button type="submit" class="absolute inset-y-0 left-0 flex items-center pl-3 hover:brightness-200 hover:scale-110">
                 <img src="assets/add.svg" class="w-5 h-5 text-gray-500" alt="add.svg" />
             </button>
@@ -43,6 +43,10 @@ export class AddTodo {
           });
     }
 
+    onBlur(): void {
+        this.form.controls["textInput"].markAsPristine();
+    }
+
     isValid(): string {
         if(this.form.controls["textInput"].invalid && !this.form.controls["textInput"].pristine){
             return 'invalid';
@@ -52,17 +56,19 @@ export class AddTodo {
     }
 
     async addTodo() {
-        if (this.form.valid) {
+        if (this.form.controls["textInput"].valid) {
             try {
                 const response = await axios.post(`/api/todos`, {
-                text: this.name,
+                text: this.form.controls["textInput"].value,
                 done: false
                 });
                 this.todoService.updateTodos();
             } catch (error) {
                 console.log(error);
             }
-            this.name = '';
+            this.form.controls["textInput"].reset();
+        } else {
+            this.form.controls["textInput"].markAsDirty();
         }
     }
 }

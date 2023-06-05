@@ -1,3 +1,24 @@
 .done {
     @apply decoration-4 line-through decoration-red-800;
 }
+
+.valid {
+    @apply border border-white ;
+}
+
+.valid {
+    @apply outline-none ring ring-teal-400;
+}
+
+.invalid {
+    @apply border-2 border-[#db4f4f];
+    animation: shake 100ms ease-in-out;
+}
+
+@keyframes shake{
+    0% { transform: translateX(0) }
+    25% { transform: translateX(5px) }
+    50% { transform: translateX(-5px) }
+    75% { transform: translateX(5px) }
+    100% { transform: translateX(0) }
+}

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
     <div class="flex flex-row justify-between my-4 border border-gray-500 rounded-xl p-4">
       <ng-container *ngIf="editedTodo === todo._id; else displayTodo">
         <div class="flex flex-row items-center">
-          <input [(ngModel)]="input" (input)="handleChange($event)" autofocus />
+          <input [(ngModel)]="input" (input)="handleChange($event)" autofocus [ngClass]="isValid()" class="block w-full text-sm text-gray-900 rounded-lg bg-white" />
           <button (click)="editElement()" class="pl-4 pr-2 hover:brightness-125 hover:scale-110">
             <img src="assets/approve.svg" width="20px" height="20px" alt="approve.svg" />
           </button>
@@ -43,7 +43,28 @@ import { Observable } from 'rxjs';
   `,
   styles: [`
     .done {
-      @apply decoration-4 line-through decoration-red-800;
+        @apply decoration-4 line-through decoration-red-800;
+    }
+
+    .valid {
+        @apply border border-white ;
+    }
+
+    .valid {
+        @apply outline-none ring ring-teal-400;
+    }
+
+    .invalid {
+        @apply border-2 border-[#db4f4f];
+        animation: shake 100ms ease-in-out;
+    }
+
+    @keyframes shake{
+        0% { transform: translateX(0) }
+        25% { transform: translateX(5px) }
+        50% { transform: translateX(-5px) }
+        75% { transform: translateX(5px) }
+        100% { transform: translateX(0) }
     }
   `]
 })
@@ -62,6 +83,14 @@ export class ElementComponent implements OnInit {
       this.editedTodo = value;
     });
   }
+
+  isValid(): string {
+    if(this.input === ''){
+        return 'invalid';
+    } else {
+        return 'valid';
+    };
+}
 
   handleChange(event: Event): void {
     this.input = (event.target as HTMLInputElement).value;
@@ -83,11 +112,13 @@ export class ElementComponent implements OnInit {
   }
 
   async editElement(): Promise<void> {
-    const newTodo: Todo = { ...this.todo, text: this.input };
-    await axios.put(`/api/todos/${this.todo._id}`, newTodo).then(() =>{
-      this.closeEdit();
-      this.todoService.updateTodos();
-  });
+    if(this.input !== ''){
+      const newTodo: Todo = { ...this.todo, text: this.input };
+      await axios.put(`/api/todos/${this.todo._id}`, newTodo).then(() =>{
+          this.closeEdit();
+          this.todoService.updateTodos();
+      });
+    }
   }
 
   async deleteElement(id: string): Promise<void> {
